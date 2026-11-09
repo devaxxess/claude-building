@@ -63,7 +63,7 @@ class Settings(BaseSettings):
 
     CLAUDE_CODE_OAUTH_TOKEN: str = ""
     SUMMARY_MODEL: str = "claude-haiku-4-5-20251001"
-    SUMMARY_ENABLED: bool = True
+    SUMMARY_ENABLED: bool = False  # claude-building: off by default -> 0 tokens
     SUMMARY_MAX_TOKENS: int = 1000
 
     # Pluggable summary backend. ``claude-cli`` spawns ``claude -p --bare``
@@ -71,7 +71,7 @@ class Settings(BaseSettings):
     # ``openai`` calls any OpenAI-compatible /chat/completions endpoint;
     # ``disabled`` uses local fallback text only. The previous OAuth/SDK path
     # was removed because Anthropic no longer permits OAuth for this API.
-    SUMMARY_BACKEND: str = "claude-cli"  # claude-cli | openai | disabled
+    SUMMARY_BACKEND: str = "disabled"  # claude-cli | openai | disabled (claude-building: disabled = 0 tokens)
     SUMMARY_CONCURRENCY: int = 4  # shared cap on in-flight summary calls
 
     # claude-cli backend

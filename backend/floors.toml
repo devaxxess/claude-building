@@ -1,29 +1,39 @@
-building_name = "Tesseron"
+# claude-building: gebouwconfiguratie
+#
+# Elke [[floors]] is een verdieping (afdeling). "repos" zijn de mapnamen van je
+# projecten: als je `claude` start in een map met die naam, komt die sessie op
+# die verdieping terecht. Sessies in een map die hier niet staat, verschijnen in
+# de lobby.
+#
+# Pas dit gerust aan. Je kunt verdiepingen ook in de app zelf beheren via
+# Building settings; die instellingen worden dan in de database bewaard.
+
+building_name = "Axxess HQ"
 
 [[floors]]
-name = "Herramientas"
+name = "R&D - Claude Building"
 floor_number = 4
 accent = "#f59e0b"
-icon = "🔧"
-repos = ["panoptica", "prometeo-arius"]
+icon = "🏗️"
+repos = ["claude-building"]
 
 [[floors]]
-name = "Recepthor"
+name = "Axxess Vault"
 floor_number = 3
 accent = "#2563eb"
-icon = "⚖️"
-repos = ["recepthor-api", "recepthor-hub", "recepthor-scraper", "recepthor-web", "recepthor-serverless"]
+icon = "🔐"
+repos = ["Axxess_Vault", "axxess-vault"]
 
 [[floors]]
-name = "Lexio"
+name = "Klantprojecten"
 floor_number = 2
-accent = "#7c3aed"
-icon = "📚"
-repos = ["lexio"]
+accent = "#059669"
+icon = "🛠️"
+repos = ["thecurrycorner", "aurora-station-pro"]
 
 [[floors]]
-name = "entreperros"
+name = "Lab"
 floor_number = 1
-accent = "#059669"
-icon = "🐕"
-repos = ["entreperros"]
+accent = "#7c3aed"
+icon = "🧪"
+repos = ["lab", "playground"]

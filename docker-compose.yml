@@ -37,7 +37,7 @@ services:
       - DATABASE_URL=sqlite+aiosqlite:////app/data/visualizer.db
       # Claude API settings (optional - enables AI summaries)
       - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN:-}
-      - SUMMARY_ENABLED=${SUMMARY_ENABLED:-true}
+      - SUMMARY_ENABLED=${SUMMARY_ENABLED:-false}
       - SERVE_STATIC=1
       - LOCALHOST_ONLY=0
       # Browser WS handshakes are origin-checked against this list (QA-014)
