@@ -48,7 +48,10 @@ make dev
 ```
 
 - Backend: http://localhost:8000
-- Frontend: http://localhost:3000. Open die in je browser.
+- Frontend: open in een tweede terminal met `make open`. Dat opent
+  `localhost:3000` met je vaste sleutel, zodat ook Simulate en de instellingen
+  werken. De sleutel staat in `backend/.ui-token` en blijft na een herstart
+  dezelfde. Verwijder dat bestand om een nieuwe sleutel te maken.
 
 Open daarna een **tweede** terminal, ga naar een van je projectmappen en start
 `claude`. Je sessie verschijnt dan als boss in het gebouw. Subagents worden
@@ -65,12 +68,30 @@ Zie `backend/floors.toml`. Een sessie komt op de verdieping waarvan de lijst
 - Wil je opnieuw vanuit het bestand beginnen, voer dan `make clean-db` uit.
   Dit wist ook de sessiegeschiedenis.
 
+## Kantoorgeheugen (fase 2)
+
+Elke sessie krijgt bij de start automatisch het geheugen van zijn verdieping mee
+(via de hook `claude-office-hook-memory`). Het geheugen staat in `office/`:
+
+- `office/building.md`: regels voor het hele gebouw. Schrijf hier zelf wat
+  elke sessie moet weten.
+- `office/floors/<verdieping>.md`: kennis per afdeling.
+- `office/handoff/<verdieping>.md`: overdrachtsnotities die sessies zelf
+  achterlaten.
+
+Deze map gaat **niet** naar GitHub, want de repo is public. Meer uitleg staat in
+`office/README.md`.
+
+Controleren of het werkt: start `claude` in een projectmap en vraag
+"op welke verdieping zit je en wat staat er in je kantoorgeheugen?".
+
 ## Updaten
 
 ```bash
 cd ~/claude-building
 git pull
 make install              # alleen nodig als dependencies veranderd zijn
+make hooks-install        # nodig als er hooks bijkomen (zoals in fase 2)
 make dev
 ```
 

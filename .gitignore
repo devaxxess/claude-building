@@ -113,3 +113,6 @@ frontend/public/sprites/paid/
 .superpowers
 docs/superpowers
 .cc2cc-session-id
+
+# claude-building
+backend/.ui-token

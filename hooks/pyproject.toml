@@ -10,6 +10,7 @@ dependencies = [
 
 [project.scripts]
 claude-office-hook = "claude_office_hooks.main:main"
+claude-office-hook-memory = "claude_office_hooks.memory:main"
 
 [build-system]
 requires = [

@@ -113,6 +113,11 @@ def create_hook_config(hook_cmd: str, hook_type: str) -> dict[str, Any]:
     return hook_entry
 
 
+def create_memory_hook_config(hook_cmd: str) -> dict[str, Any]:
+    """claude-building: SessionStart hook that prints the office memory."""
+    return {"hooks": [{"type": "command", "command": f"{hook_cmd}-memory", "timeout": 3}]}
+
+
 def is_same_hook(entry1: dict[str, Any], entry2: dict[str, Any]) -> bool:
     """Check if two hook entries are effectively the same."""
     # Simple comparison of command path
@@ -153,6 +158,18 @@ def install_hooks(hook_cmd: str, dry_run: bool = False):
         print(f"  [Add]  {hook_type}: {hook_cmd} {event_type}")
         current_list.append(new_entry)
         hooks_config[hook_type] = current_list
+        changes_made = True
+
+    # claude-building: shared office memory, injected at session start.
+    # Its command contains "claude-office-hook", so uninstall removes it too.
+    memory_entry = create_memory_hook_config(hook_cmd)
+    start_list = hooks_config.get("SessionStart", [])
+    if any(is_same_hook(existing, memory_entry) for existing in start_list):
+        print("  [Skip] SessionStart: memory hook already exists.")
+    else:
+        print(f"  [Add]  SessionStart: {memory_entry['hooks'][0]['command']}")
+        start_list.append(memory_entry)
+        hooks_config["SessionStart"] = start_list
         changes_made = True
 
     if changes_made:

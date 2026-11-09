@@ -6,6 +6,11 @@ import os
 # when CLAUDE_CODE_OAUTH_TOKEN is present in .env but expired.
 os.environ["SUMMARY_ENABLED"] = "False"
 
+# claude-building: never let tests write into the real office/ memory folder.
+import tempfile as _tempfile  # noqa: E402
+
+os.environ.setdefault("OFFICE_DIR", _tempfile.mkdtemp(prefix="office-test-"))
+
 import asyncio
 import tempfile
 from collections.abc import AsyncIterator, Iterator

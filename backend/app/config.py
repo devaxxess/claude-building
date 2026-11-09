@@ -7,6 +7,28 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _BACKEND_DIR = Path(__file__).parent.parent.resolve()
 _DEFAULT_DB_PATH = _BACKEND_DIR / "visualizer.db"
+_DEFAULT_OFFICE_DIR = _BACKEND_DIR.parent / "office"
+_UI_TOKEN_FILE = _BACKEND_DIR / ".ui-token"
+
+
+def _load_or_create_ui_token() -> str:
+    """claude-building: keep the auto-generated UI token stable across restarts.
+
+    Upstream generates a new token on every launch, which breaks bookmarks of
+    ``http://localhost:3000/?token=...``. We persist it in ``backend/.ui-token``
+    (gitignored, mode 600). Delete the file to rotate the token.
+    """
+    try:
+        if _UI_TOKEN_FILE.exists():
+            token = _UI_TOKEN_FILE.read_text(encoding="utf-8").strip()
+            if len(token) >= 32:
+                return token
+        token = secrets.token_hex(32)
+        _UI_TOKEN_FILE.write_text(token + "\n", encoding="utf-8")
+        _UI_TOKEN_FILE.chmod(0o600)
+        return token
+    except OSError:
+        return secrets.token_hex(32)
 
 
 def _resolve_version() -> str:
@@ -105,7 +127,11 @@ class Settings(BaseSettings):
     # Auto-generated per-launch token. Used as the effective API key when
     # CLAUDE_OFFICE_API_KEY is not explicitly set. This ensures state-changing
     # endpoints always require an API key even in the default configuration.
-    _auto_api_key: str = secrets.token_hex(32)
+    _auto_api_key: str = _load_or_create_ui_token()
+
+    # claude-building: shared office memory (see app/core/office_memory.py)
+    OFFICE_DIR: str = str(_DEFAULT_OFFICE_DIR)
+    MEMORY_CONTEXT_MAX_CHARS: int = 8000
 
     # Rich tracebacks render local variables and full filesystem paths into logs.
     # Useful in development; disable for shared/production deployments (SEC-006).

@@ -6,7 +6,7 @@
 	build-static frontend-build-static \
 	docker-build docker-up docker-down docker-logs docker-shell docker-config \
 	pre-commit pre-commit-update depsupdate depsshow uv-lock uv-sync setup resetup remove-venv \
-	bump-version version-check help
+	bump-version version-check help open
 
 # Detect package manager: prefer bun if available, otherwise use npm
 PKG_MGR := $(shell command -v bun >/dev/null 2>&1 && echo "bun" || echo "npm")
@@ -74,6 +74,10 @@ gen-types:			# Regenerate TypeScript types from Pydantic models
 # Hook management targets
 hooks-install:
 	cd hooks && ./install.sh
+
+open:			# claude-building: open the UI with the (persistent) token
+	@if [ -f backend/.ui-token ]; then open "http://localhost:3000/?token=$$(cat backend/.ui-token)"; \
+	else echo "Start eerst 'make dev' (maakt backend/.ui-token aan)"; fi
 
 hooks-uninstall:
 	cd hooks && ./uninstall.sh
