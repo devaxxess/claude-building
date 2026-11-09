@@ -11,7 +11,7 @@
 building_name = "Axxess HQ"
 
 [[floors]]
-name = "R&D - Claude Building"
+name = "R&D"
 floor_number = 4
 accent = "#f59e0b"
 icon = "🏗️"

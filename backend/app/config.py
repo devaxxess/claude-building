@@ -71,7 +71,8 @@ class Settings(BaseSettings):
     # ``openai`` calls any OpenAI-compatible /chat/completions endpoint;
     # ``disabled`` uses local fallback text only. The previous OAuth/SDK path
     # was removed because Anthropic no longer permits OAuth for this API.
-    SUMMARY_BACKEND: str = "disabled"  # claude-cli | openai | disabled (claude-building: disabled = 0 tokens)
+    # claude-building: "disabled" = 0 tokens. Options: claude-cli | openai | disabled
+    SUMMARY_BACKEND: str = "disabled"
     SUMMARY_CONCURRENCY: int = 4  # shared cap on in-flight summary calls
 
     # claude-cli backend

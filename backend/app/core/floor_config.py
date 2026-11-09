@@ -113,7 +113,8 @@ def get_cached_building_config() -> BuildingConfig:
     """Return the cached building config, falling back to an empty default."""
     global _cached_config
     if _cached_config is None:
-        _cached_config = BuildingConfig()
+        # claude-building: seed from floors.toml when nothing is stored yet.
+        _cached_config = load_building_config_from_toml(toml_path=DEFAULT_TOML_PATH)
     return _cached_config
 
 
@@ -135,6 +136,7 @@ async def load_building_config(db: AsyncSession) -> BuildingConfig:
     Returns:
         The loaded (or default) BuildingConfig.
     """
+    global _cached_config
     try:
         result = await db.execute(
             select(UserPreference).where(UserPreference.key == BUILDING_CONFIG_KEY)
@@ -142,7 +144,6 @@ async def load_building_config(db: AsyncSession) -> BuildingConfig:
         pref = result.scalar_one_or_none()
         if pref and pref.value:
             config = BuildingConfig.from_json(pref.value)
-            global _cached_config
             _cached_config = config
             return config
     except (json.JSONDecodeError, ValueError) as exc:
@@ -150,7 +151,12 @@ async def load_building_config(db: AsyncSession) -> BuildingConfig:
     except Exception as exc:
         logger.exception("Error loading building_config: %s", exc)
 
-    return BuildingConfig()
+    # claude-building: no stored config -> fall back to floors.toml so the
+    # building is populated on first launch. Saving via Building settings
+    # stores a DB preference, which then takes priority.
+    config = load_building_config_from_toml(toml_path=DEFAULT_TOML_PATH)
+    _cached_config = config
+    return config
 
 
 def load_building_config_from_toml(

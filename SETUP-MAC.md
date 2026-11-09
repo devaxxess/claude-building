@@ -57,8 +57,13 @@ employees.
 ## 4. Verdiepingen aanpassen
 
 Zie `backend/floors.toml`. Een sessie komt op de verdieping waarvan de lijst
-`repos` de **mapnaam** bevat waarin je `claude` startte. Je kunt dit ook in de
-app aanpassen via Building settings.
+`repos` de **mapnaam** bevat waarin je `claude` startte.
+
+- Bij de eerste start wordt het gebouw opgebouwd vanuit `floors.toml`.
+- Pas je iets aan in de app (Building settings), dan wordt dat in de database
+  bewaard en heeft het voorrang op het bestand.
+- Wil je opnieuw vanuit het bestand beginnen, voer dan `make clean-db` uit.
+  Dit wist ook de sessiegeschiedenis.
 
 ## Updaten
 
